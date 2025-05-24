@@ -1,0 +1,402 @@
+[
+  {
+    "Name": "Engine RPM",
+    "HrefId": "pid-engine-rpm"
+  },
+  {
+    "Name": "Engine RPM",
+    "HrefId": "pid-engine-rpm"
+  },
+  {
+    "Name": "Vehicle Speed",
+    "HrefId": "pid-vehicle-speed"
+  },
+  {
+    "Name": "Vehicle speed",
+    "HrefId": "pid-vehicle-speed"
+  },
+  {
+    "Name": "Engine Coolant Temperature",
+    "HrefId": "pid-coolant-temp"
+  },
+  {
+    "Name": "Engine Oil Temperature",
+    "HrefId": "pid-engine-oil-temperature"
+  },
+  {
+    "Name": "Temperature of the engine oil - sensor may be situated near the oil filter but this location will vary depending on the vehicle",
+    "HrefId": "pid-temperature-of-the-engine-oil---sensor-may-be-situated-near-the-oil-filter-but-this-location-will-vary-depending-on-the-vehicle"
+  },
+  {
+    "Name": "Ambient Air Temperature",
+    "HrefId": "pid-ambient-air-temperature"
+  },
+  {
+    "Name": "Air temperature around the vehicle - typically this will be a few degrees below intake temperature",
+    "HrefId": "pid-air-temperature-around-the-vehicle---typically-this-will-be-a-few-degrees-below-intake-temperature"
+  },
+  {
+    "Name": "Barometric Pressure",
+    "HrefId": "pid-ambient-pressure"
+  },
+  {
+    "Name": "Accelerator Pedal Position",
+    "HrefId": "pid-accelerator-position"
+  },
+  {
+    "Name": "Relative Accelerator Pedal Position",
+    "HrefId": "pid-relative-accelerator-pedal-position"
+  },
+  {
+    "Name": "Commanded Throttle Actuator",
+    "HrefId": "pid-commanded-throttle-actuator"
+  },
+  {
+    "Name": "Relative Throttle Position",
+    "HrefId": "pid-relative-throttle-position"
+  },
+  {
+    "Name": "Absolute Throttle Position",
+    "HrefId": "pid-abs-throttle"
+  },
+  {
+    "Name": "Control Module Voltage",
+    "HrefId": "pid-control-module-voltage"
+  },
+  {
+    "Name": "Hybrid Battery Pack Remaining Life",
+    "HrefId": "pid-hybrid-battery-pack-remaining-life"
+  },
+  {
+    "Name": "Hybrid/EV Vehicle System Status",
+    "HrefId": "pid-hybrid-ev-vehicle-system-status"
+  },
+  {
+    "Name": "Calculated Engine Load Value",
+    "HrefId": "pid-calculated-engine-load-value"
+  },
+  {
+    "Name": "Absolute Load Value",
+    "HrefId": "pid-absolute-load-value"
+  },
+  {
+    "Name": "Driver's Demand Engine - Percent Torque",
+    "HrefId": "pid-driver-s-demand-engine---percent-torque"
+  },
+  {
+    "Name": "Actual Engine - Percent Torque",
+    "HrefId": "pid-actual-torque"
+  },
+  {
+    "Name": "Engine Friction - Percent Torque",
+    "HrefId": "pid-engine-friction---percent-torque"
+  },
+  {
+    "Name": "The percent of maximum engine torque required to run a 'fully equipped' engine at no load, this includes:Internal engine components (crank, pistons, cams, valves, etc)Fuel, oilWater pumpAir intakeExhaustAlternatorEmissions control equipmentThis value does not account for:Power steeringVacuum pumpsAC CompressorsBraking systemsAcitve suspension systemsetc",
+    "HrefId": "pid-friction-torque"
+  },
+  {
+    "Name": "Engine Reference Torque",
+    "HrefId": "pid-ref-torque"
+  },
+  {
+    "Name": "Engine Percent Torque Data",
+    "HrefId": "pid-engine-percent-torque-data"
+  },
+  {
+    "Name": "Auxiliary Input/Output",
+    "HrefId": "pid-auxiliary-input-output"
+  },
+  {
+    "Name": "Exhaust Gas Temperature (EGT)",
+    "HrefId": "pid-exhaust-gas-temperature--egt-"
+  },
+  {
+    "Name": "Engine Exhaust Flow Rate",
+    "HrefId": "pid-engine-exhaust-flow-rate"
+  },
+  {
+    "Name": "Exhaust flow rate in kg/hr or lbs/hr measured upstream of the aftertreatment system, averaged over the last 1000ms",
+    "HrefId": "pid-exhaust-flow-rate-in-kg-hr-or-lbs-hr-measured-upstream-of-the-aftertreatment-system--averaged-over-the-last-1000ms"
+  },
+  {
+    "Name": "Exhaust Pressure",
+    "HrefId": "pid-exhaust-pressure"
+  },
+  {
+    "Name": "Manifold Surface Temperature",
+    "HrefId": "pid-manifold-surface-temperature"
+  },
+  {
+    "Name": "Temperature at the outer surface of the exhaust manifold",
+    "HrefId": "pid-temperature-at-the-outer-surface-of-the-exhaust-manifold"
+  },
+  {
+    "Name": "Timing Advance for #1 cylinder",
+    "HrefId": "pid-timing-advance-for--1-cylinder"
+  },
+  {
+    "Name": "Engine Run Time",
+    "HrefId": "pid-engine-run-time"
+  },
+  {
+    "Name": "Run Time Since Engine Start",
+    "HrefId": "pid-run-time-since-engine-start"
+  },
+  {
+    "Name": "Run time in seconds since the engine was last started",
+    "HrefId": "pid-run-time-in-seconds-since-the-engine-was-last-started"
+  },
+  {
+    "Name": "Time Run with MIL On",
+    "HrefId": "pid-time-run-with-mil-on"
+  },
+  {
+    "Name": "Distance Traveled while MIL is Activated",
+    "HrefId": "pid-distance-traveled-while-mil-is-activated"
+  },
+  {
+    "Name": "The distance driven since the check engine light last illuminated (reset when codes are cleared or the battery is disconnected)",
+    "HrefId": "pid-the-distance-driven-since-the-check-engine-light-last-illuminated--reset-when-codes-are-cleared-or-the-battery-is-disconnected-"
+  },
+  {
+    "Name": "Time since Trouble Codes Cleared",
+    "HrefId": "pid-time-since-trouble-codes-cleared"
+  },
+  {
+    "Name": "Distance Traveled Since Codes Cleared",
+    "HrefId": "pid-distance-traveled-since-codes-cleared"
+  },
+  {
+    "Name": "Warm-ups Since Codes Cleared",
+    "HrefId": "pid-warm-ups-since-codes-cleared"
+  },
+  {
+    "Name": "Fuel System Status",
+    "HrefId": "pid-fuel-system-status"
+  },
+  {
+    "Name": "Oxygen Sensor Voltage",
+    "HrefId": "pid-oxygen-sensor-voltage"
+  },
+  {
+    "Name": "Oxygen Sensor Equivalence Ratio",
+    "HrefId": "pid-oxygen-sensor-equivalence-ratio"
+  },
+  {
+    "Name": "Oxygen Sensor Current",
+    "HrefId": "pid-oxygen-sensor-current"
+  },
+  {
+    "Name": "Short Term Fuel Trim",
+    "HrefId": "pid-short-term-fuel-trim"
+  },
+  {
+    "Name": "Long Term Fuel Trim",
+    "HrefId": "pid-long-trim"
+  },
+  {
+    "Name": "Commanded Equivalence Ratio",
+    "HrefId": "pid-commanded-equivalence-ratio"
+  },
+  {
+    "Name": "Mass Air Flow Rate",
+    "HrefId": "pid-mass-air-flow-rate"
+  },
+  {
+    "Name": "Intake Air Temperature",
+    "HrefId": "pid-intake-air-temperature"
+  },
+  {
+    "Name": "Intake Manifold Absolute Pressure",
+    "HrefId": "pid-manifold-pressure"
+  },
+  {
+    "Name": "Fuel Pressure (Gauge)",
+    "HrefId": "pid-fuel-pressure--gauge-"
+  },
+  {
+    "Name": "Fuel Rail Pressure",
+    "HrefId": "pid-fuel-rail-pressure"
+  },
+  {
+    "Name": "Fuel Rail Pressure (Absolute)",
+    "HrefId": "pid-fuel-rail-pressure--absolute-"
+  },
+  {
+    "Name": "Fuel Rail Pressure (relative to manifold vacuum)",
+    "HrefId": "pid-fuel-rail-pressure--relative-to-manifold-vacuum-"
+  },
+  {
+    "Name": "Fuel pressure value relative to the intake manifold",
+    "HrefId": "pid-fuel-pressure-value-relative-to-the-intake-manifold"
+  },
+  {
+    "Name": "Alcohol Fuel %",
+    "HrefId": "pid-alcohol-fuel--"
+  },
+  {
+    "Name": "Fuel Level Input",
+    "HrefId": "pid-fuel-level-input"
+  },
+  {
+    "Name": "Percent of maximum fuel tank capacity",
+    "HrefId": "pid-percent-of-maximum-fuel-tank-capacity"
+  },
+  {
+    "Name": "Engine Fuel Rate",
+    "HrefId": "pid-engine-fuel-rate"
+  },
+  {
+    "Name": "Cylinder Fuel Rate",
+    "HrefId": "pid-cylinder-fuel-rate"
+  },
+  {
+    "Name": "The calculated amount of fuel injected per cylinder during the most recent intake stroke - displayed in mg/stroke",
+    "HrefId": "pid-the-calculated-amount-of-fuel-injected-per-cylinder-during-the-most-recent-intake-stroke---displayed-in-mg-stroke"
+  },
+  {
+    "Name": "Fuel System Percentage Use",
+    "HrefId": "pid-fuel-system-percentage-use"
+  },
+  {
+    "Name": "Fuel Injection Timing",
+    "HrefId": "pid-fuel-injection-timing"
+  },
+  {
+    "Name": "Fuel System Control",
+    "HrefId": "pid-fuel-system-control"
+  },
+  {
+    "Name": "Fuel Pressure Control System",
+    "HrefId": "pid-fuel-pressure-control-system"
+  },
+  {
+    "Name": "Injection Pressure Control System",
+    "HrefId": "pid-injection-pressure-control-system"
+  },
+  {
+    "Name": "Boost Pressure Control",
+    "HrefId": "pid-boost-pressure-control"
+  },
+  {
+    "Name": "Turbocharger RPM",
+    "HrefId": "pid-turbocharger-rpm"
+  },
+  {
+    "Name": "Turbocharger Temperature",
+    "HrefId": "pid-turbocharger-temperature"
+  },
+  {
+    "Name": "Turbocharger Compressor Inlet Pressure Sensor",
+    "HrefId": "pid-turbocharger-compressor-inlet-pressure-sensor"
+  },
+  {
+    "Name": "Variable Geometry Turbo (VGT) Control",
+    "HrefId": "pid-variable-geometry-turbo--vgt--control"
+  },
+  {
+    "Name": "Wastegate Control",
+    "HrefId": "pid-wastegate-control"
+  },
+  {
+    "Name": "Charge Air Cooler Temperature (CACT)",
+    "HrefId": "pid-charge-air-cooler-temperature--cact-"
+  },
+  {
+    "Name": "Commanded\u00a0EGR",
+    "HrefId": "pid-command-egr"
+  },
+  {
+    "Name": "EGR Error",
+    "HrefId": "pid-egr-error"
+  },
+  {
+    "Name": "Commanded Diesel Intake Air Flow Control",
+    "HrefId": "pid-commanded-diesel-intake-air-flow-control"
+  },
+  {
+    "Name": "Exhaust Gas Recirculation Temperature",
+    "HrefId": "pid-exhaust-gas-recirculation-temperature"
+  },
+  {
+    "Name": "EVAP System Vapor Pressure",
+    "HrefId": "pid-evap-system-vapor-pressure"
+  },
+  {
+    "Name": "Absolute Evap System Vapor Pressure",
+    "HrefId": "pid-absolute-evap-system-vapor-pressure"
+  },
+  {
+    "Name": "Commanded Evaporative Purge",
+    "HrefId": "pid-commanded-evaporative-purge"
+  },
+  {
+    "Name": "Catalyst Temperature",
+    "HrefId": "pid-catalyst-temperature"
+  },
+  {
+    "Name": "Diesel Aftertreatment Status",
+    "HrefId": "pid-diesel-aftertreatment-status"
+  },
+  {
+    "Name": "Diesel Exhaust Fluid Sensor Data",
+    "HrefId": "pid-diesel-exhaust-fluid-sensor-data"
+  },
+  {
+    "Name": "Diesel Particulate Filter (DPF)",
+    "HrefId": "pid-part-filter"
+  },
+  {
+    "Name": "Diesel Particulate Filter (DPF) Temperature",
+    "HrefId": "pid-diesel-particulate-filter--dpf--temperature"
+  },
+  {
+    "Name": "NOx Sensor",
+    "HrefId": "pid-nox-sensor"
+  },
+  {
+    "Name": "NOx Control System",
+    "HrefId": "pid-nox-control-system"
+  },
+  {
+    "Name": "NOx Sensor Corrected Data",
+    "HrefId": "pid-nox-sensor-corrected-data"
+  },
+  {
+    "Name": "NOx concentration in PPM including learned adjustments and offsets.",
+    "HrefId": "pid-nox-concentration-in-ppm-including-learned-adjustments-and-offsets-"
+  },
+  {
+    "Name": "NOx NTE Control Area Status",
+    "HrefId": "pid-nox-nte-control-area-status"
+  },
+  {
+    "Name": "PM Sensor Bank 1 & 2",
+    "HrefId": "pid-pm-sensor-bank-1---2"
+  },
+  {
+    "Name": "Particulate Matter (PM) Sensor",
+    "HrefId": "pid-particulate-matter--pm--sensor"
+  },
+  {
+    "Name": "The soot concentration as measured by the particulate matter sensors on banks 1 & 2 - displayed in mg/m3",
+    "HrefId": "pid-the-soot-concentration-as-measured-by-the-particulate-matter-sensors-on-banks-1---2---displayed-in-mg-m3"
+  },
+  {
+    "Name": "PM NTE Control Area Status",
+    "HrefId": "pid-pm-nte-control-area-status"
+  },
+  {
+    "Name": "SCR Inducement System",
+    "HrefId": "pid-scr-inducement"
+  },
+  {
+    "Name": "NOx Warning And Inducement System",
+    "HrefId": "pid-nox-warning-and-inducement-system"
+  },
+  {
+    "Name": "Engine Run Time for AECD",
+    "HrefId": "pid-engine-run-time-for-aecd"
+  }
+]
