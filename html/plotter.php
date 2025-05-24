@@ -39,16 +39,33 @@ $statsList = json_decode(file_get_contents("stats_list.json"), true);
   <link rel="stylesheet" media="screen" href="css/theme.css"/>
   <style>
     body { 
-      font-family: Arial; 
+      font-family: Roboto; 
       margin: 2em; 
     }
     .checkbox-section { margin-top: 2em; }
     canvas { margin-top: 1em; max-width: 100%; }
-    button { margin: 0.5em; }
+
     .definitions { margin-top: 3em; }
     .definitions h3 { margin-bottom: 0.5em; }
     .definitions dt { font-weight: bold; margin-top: 1em; }
     .definitions dd { margin-left: 1em; margin-bottom: 0.5em; }
+    .button {
+  display: inline-block;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 0.3em;
+  cursor: pointer;
+  margin: 0.5em;
+  text-align: center;
+  text-decoration: none;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
 
     #chart-container {
       max-width: 1400px;
