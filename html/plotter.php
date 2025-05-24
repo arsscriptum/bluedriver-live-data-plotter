@@ -1,5 +1,30 @@
 <?php
+
+function convertDisplayName($displayName) {
+    // Replace spaces with underscores
+    $newName = str_replace(' ', '_', $displayName);
+    
+    // Remove non-alphanumeric characters except underscore
+    $newName = preg_replace('/[^a-zA-Z0-9_]/', '', $newName);
+    
+    // Replace multiple underscores with a single one
+    $newName = preg_replace('/__+/', '_', $newName);
+    
+    // Convert to lowercase and trim underscores from start/end
+    $newName = trim(strtolower($newName), '_');
+
+    return $newName;
+}
+
+
+
 $statsList = json_decode(file_get_contents("stats_list.json"), true);
+
+//foreach ($statsList as $stat) {
+//    $test = $stat['Name'];
+//    echo "$test<br>";
+//}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,14 +51,7 @@ $statsList = json_decode(file_get_contents("stats_list.json"), true);
 
 <div class="checkbox-section">
   <h3>Combined Graph Controls</h3>
-  <div id="checkboxes-main">
-    <?php foreach ($statsList as $stat): ?>
-      <label>
-        <input type="checkbox" value="<?= htmlspecialchars($stat['Name']) ?>" onchange="updateChart()"> 
-        <a href="#<?= htmlspecialchars($stat['HrefId']) ?>"><?= htmlspecialchars($stat['Name']) ?></a>
-      </label><br>
-    <?php endforeach; ?>
-  </div>
+  <div id="checkboxes-main"></div>
   <button onclick="selectAll('main')">Select All</button>
   <button onclick="unselectAll('main')">Unselect All</button>
   <button onclick="updateChart()">Update Graph</button>
@@ -43,19 +61,52 @@ $statsList = json_decode(file_get_contents("stats_list.json"), true);
 
 <div class="checkbox-section">
   <h3>Individual Graph Controls</h3>
-  <div id="checkboxes-individual">
-    <?php foreach ($statsList as $stat): ?>
-      <label>
-        <input type="checkbox" value="<?= htmlspecialchars($stat['Name']) ?>"> 
-        <a href="#<?= htmlspecialchars($stat['HrefId']) ?>"><?= htmlspecialchars($stat['Name']) ?></a>
-      </label><br>
-    <?php endforeach; ?>
-  </div>
+  <div id="checkboxes-individual"></div>
   <button onclick="selectAll('individual')">Select All</button>
   <button onclick="unselectAll('individual')">Unselect All</button>
   <button onclick="updateIndividualCharts()">Plot Individual Graphs</button>
   <div id="individual-charts"></div>
 </div>
+
+
+<script>
+function convertDisplayName(displayName) {
+  let newName = displayName.replace(/\s+/g, '_');
+  newName = newName.replace(/[^a-zA-Z0-9_]/g, '');
+  newName = newName.replace(/__+/g, '_');
+  newName = newName.toLowerCase().replace(/^_+|_+$/g, '').trim();
+  return newName;
+}
+function sanitizeStatId(str) {
+  if (str.toLowerCase().includes('oxygen_sensor')) {
+    return 'oxygen_sensor_voltage';
+  }
+
+  return str
+    .replace(/_(1|2|a|b|c|d|e|f|g)$/i, '')            // Remove trailing _1, _2, _A, _D
+    .replace(/_kpm$/i, '')                  // Remove trailing _kpm
+    .replace(/_kpa$/i, '')                  // Remove trailing _kpa
+    .replace(/_kmh$/i, '')                  // Remove trailing _kmh
+    .replace(/_bank$/i, '')                  // Remove trailing _bank
+    .replace(/_trim$/i, '')                  // Remove trailing _trim
+    .trim();
+}
+// Pass PHP array to JavaScript
+const statsList = <?php echo json_encode($statsList, JSON_UNESCAPED_SLASHES); ?>;
+
+// Create a map from converted name to HrefId
+const nameToHrefMap = {};
+statsList.forEach(stat => {
+  const newname = sanitizeStatId(convertDisplayName(stat.Name));
+
+  nameToHrefMap[newname] = stat.HrefId;
+  console.log(`HrefId for ${newname}: ${stat.HrefId}`);
+});
+
+
+</script>
+
+
 
 <script>
 let csvData = [], labels = [], chart;
@@ -69,15 +120,59 @@ function unselectAll(section) {
 }
 
 document.getElementById('csvFile').addEventListener('change', function (e) {
-  Papa.parse(e.target.files[0], {
-    header: true,
-    skipEmptyLines: true,
-    complete: function (results) {
-      csvData = results.data.filter(row => !isNaN(parseFloat(row["Time (s)"])));
-      labels = csvData.map(row => parseFloat(row["Time (s)"]));
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('csvFile', file);
+
+  fetch('upload_csv.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(parsed => {
+    if (parsed.headers && parsed.data) {
+      csvData = parsed.data;
+      labels = parsed.data.map(row => parseFloat(row["Time (s)"]));
+
+      generateCheckboxes(parsed.headers);
+    } else {
+      console.error("Invalid response:", parsed);
+    }
+  })
+  .catch(error => console.error("Upload failed:", error));
+});
+
+function getHrefIdByPartialName(nameToHrefMap, lookupName) {
+  for (const key in nameToHrefMap) {
+    if (key.includes(lookupName)) {
+      return nameToHrefMap[key];
+    }
+  }
+  return null; // Or return a fallback value if not found
+}
+
+
+function generateCheckboxes(headers) {
+  document.getElementById('checkboxes-main').innerHTML = '';
+  document.getElementById('checkboxes-individual').innerHTML = '';
+  headers.forEach(header => {
+    if (header !== "Time (s)") {
+      const id = header.toLowerCase().replace(/[^a-z0-9]/g, '-');
+      const lookupName = sanitizeStatId(convertDisplayName(header));
+
+      const hrefId = getHrefIdByPartialName(nameToHrefMap, lookupName)
+      console.log(`generateCheckboxes HrefId for ${lookupName}: ${hrefId}`);
+
+      ["main", "individual"].forEach(section => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="checkbox" value="${header}" onchange="${section === 'main' ? 'updateChart()' : ''}"> <a href="#${hrefId}" target="_self">${lookupName}</a><br>`;
+        document.getElementById(`checkboxes-${section}`).appendChild(label);
+      });
     }
   });
-});
+}
 
 function updateChart() {
   const checked = Array.from(document.querySelectorAll('#checkboxes-main input:checked')).map(cb => cb.value);
