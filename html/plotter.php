@@ -20,34 +20,56 @@ function convertDisplayName($displayName) {
 
 $statsList = json_decode(file_get_contents("stats_list.json"), true);
 
-//foreach ($statsList as $stat) {
-//    $test = $stat['Name'];
-//    echo "$test<br>";
-//}
 
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BlueDriver CSV Plotter: version1 beta test pour Mickael</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <link rel="stylesheet" media="print" href="https://assets8.freshdesk.com/assets/cdn/portal_print-6e04b27f27ab27faab81f917d275d593fa892ce13150854024baaf983b3f4326.css"/>
-  <link rel="stylesheet" media="screen" href="https://assets10.freshdesk.com/assets/cdn/falcon_portal_utils-cdd6e3a8a0ccf60cbbc7c27271252bffae829db1973666f4544d2135b3e34468.css"/>
-  <link href="theme.css?v=4&amp;d=1682098013" media="screen" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="theme.css">
+  <title>BlueDriver CSV Plotter</title>
+
+  <script src="js/chart.js"></script>
+  <script src="js/papaparse.min.js"></script>
+  <script src="js/chartjs-plugin-zoom.min.js"></script>
+  <link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" media="print" href="css/portal_print.css"/>
+  <link rel="stylesheet" media="screen" href="css/falcon_portal_utils.css"/>
+  <link rel="stylesheet" media="screen" href="css/theme.css"/>
   <style>
-    body { font-family: Arial; margin: 2em; }
+    body { 
+      font-family: Arial; 
+      margin: 2em; 
+    }
     .checkbox-section { margin-top: 2em; }
     canvas { margin-top: 1em; max-width: 100%; }
     button { margin: 0.5em; }
-  </style>
+    .definitions { margin-top: 3em; }
+    .definitions h3 { margin-bottom: 0.5em; }
+    .definitions dt { font-weight: bold; margin-top: 1em; }
+    .definitions dd { margin-left: 1em; margin-bottom: 0.5em; }
+
+    #chart-container {
+      max-width: 1400px;
+      height: 800px;
+      margin: auto;
+    }
+
+    #chart {
+    width: 100%;
+    height: 100%;
+  }
+</style>
 </head>
 <body>
 
-<h1 style="text-align: center;">BlueDriver CSV Plotter: version1 beta test pour Mickael</h1>
-<input type="file" id="csvFile" accept=".csv">
+<h1 style="text-align: center; font-size: 2.5em; margin-bottom: 1em;">BlueDriver CSV Plotter: version1 beta test pour Mickael </h1>
+
+<label for="csvFile" class="button">
+  <i class="fas fa-upload"></i> Upload CSV
+</label>
+<input type="file" id="csvFile" accept=".csv" style="display: none;">
 
 <div class="checkbox-section">
   <h3>Combined Graph Controls</h3>
@@ -55,8 +77,13 @@ $statsList = json_decode(file_get_contents("stats_list.json"), true);
   <button onclick="selectAll('main')">Select All</button>
   <button onclick="unselectAll('main')">Unselect All</button>
   <button onclick="updateChart()">Update Graph</button>
+  <button onclick="chart.resetZoom()">Reset Zoom</button>
+
   <button onclick="saveChart(chart, 'combined-graph')">Save Graph</button>
+  <div id="chart-container">
   <canvas id="chart"></canvas>
+   </div>
+  
 </div>
 
 <div class="checkbox-section">
@@ -67,9 +94,41 @@ $statsList = json_decode(file_get_contents("stats_list.json"), true);
   <button onclick="updateIndividualCharts()">Plot Individual Graphs</button>
   <div id="individual-charts"></div>
 </div>
-
-
 <script>
+let csvData = [], labels = [], chart;
+
+// Pass PHP array to JavaScript
+const statsList = <?php echo json_encode($statsList, JSON_UNESCAPED_SLASHES); ?>;
+
+// Create a map from converted name to HrefId
+const nameToHrefMap = {};
+statsList.forEach(stat => {
+  const newname = sanitizeStatId(convertDisplayName(stat.Name));
+
+  nameToHrefMap[newname] = stat.HrefId;
+  console.log(`HrefId for ${newname}: ${stat.HrefId}`);
+});
+
+
+
+function selectAll(section) {
+  document.querySelectorAll(`#checkboxes-${section} input[type=checkbox]`).forEach(cb => cb.checked = true);
+}
+
+function unselectAll(section) {
+  document.querySelectorAll(`#checkboxes-${section} input[type=checkbox]`).forEach(cb => cb.checked = false);
+}
+function getCsvKeyFromDisplayName(displayName) {
+  const lookup = convertDisplayName(displayName);
+  for (const stat of statsList) {
+    const candidate = convertDisplayName(stat.Name);
+    if (candidate === lookup) {
+      return stat.Name; // actual CSV column header
+    }
+  }
+  return null;
+}
+
 function convertDisplayName(displayName) {
   let newName = displayName.replace(/\s+/g, '_');
   newName = newName.replace(/[^a-zA-Z0-9_]/g, '');
@@ -77,6 +136,7 @@ function convertDisplayName(displayName) {
   newName = newName.toLowerCase().replace(/^_+|_+$/g, '').trim();
   return newName;
 }
+
 function sanitizeStatId(str) {
   if (str.toLowerCase().includes('oxygen_sensor')) {
     return 'oxygen_sensor_voltage';
@@ -91,58 +151,6 @@ function sanitizeStatId(str) {
     .replace(/_trim$/i, '')                  // Remove trailing _trim
     .trim();
 }
-// Pass PHP array to JavaScript
-const statsList = <?php echo json_encode($statsList, JSON_UNESCAPED_SLASHES); ?>;
-
-// Create a map from converted name to HrefId
-const nameToHrefMap = {};
-statsList.forEach(stat => {
-  const newname = sanitizeStatId(convertDisplayName(stat.Name));
-
-  nameToHrefMap[newname] = stat.HrefId;
-  console.log(`HrefId for ${newname}: ${stat.HrefId}`);
-});
-
-
-</script>
-
-
-
-<script>
-let csvData = [], labels = [], chart;
-
-function selectAll(section) {
-  document.querySelectorAll(`#checkboxes-${section} input[type=checkbox]`).forEach(cb => cb.checked = true);
-}
-
-function unselectAll(section) {
-  document.querySelectorAll(`#checkboxes-${section} input[type=checkbox]`).forEach(cb => cb.checked = false);
-}
-
-document.getElementById('csvFile').addEventListener('change', function (e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const formData = new FormData();
-  formData.append('csvFile', file);
-
-  fetch('upload_csv.php', {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.json())
-  .then(parsed => {
-    if (parsed.headers && parsed.data) {
-      csvData = parsed.data;
-      labels = parsed.data.map(row => parseFloat(row["Time (s)"]));
-
-      generateCheckboxes(parsed.headers);
-    } else {
-      console.error("Invalid response:", parsed);
-    }
-  })
-  .catch(error => console.error("Upload failed:", error));
-});
 
 function getHrefIdByPartialName(nameToHrefMap, lookupName) {
   for (const key in nameToHrefMap) {
@@ -152,7 +160,6 @@ function getHrefIdByPartialName(nameToHrefMap, lookupName) {
   }
   return null; // Or return a fallback value if not found
 }
-
 
 function generateCheckboxes(headers) {
   document.getElementById('checkboxes-main').innerHTML = '';
@@ -174,6 +181,21 @@ function generateCheckboxes(headers) {
   });
 }
 
+
+document.getElementById('csvFile').addEventListener('change', function (e) {
+  Papa.parse(e.target.files[0], {
+    header: true,
+    skipEmptyLines: true,
+    delimiter: ",",
+    complete: function (results) {
+      csvData = results.data.filter(row => !isNaN(parseFloat(row["Time (s)"])));
+      labels = csvData.map(row => parseFloat(row["Time (s)"]));
+      generateCheckboxes(Object.keys(results.data[0]));
+    }
+  });
+});
+
+
 function updateChart() {
   const checked = Array.from(document.querySelectorAll('#checkboxes-main input:checked')).map(cb => cb.value);
   const datasets = checked.map(label => ({
@@ -185,17 +207,38 @@ function updateChart() {
   }));
 
   if (chart) chart.destroy();
-  chart = new Chart(document.getElementById('chart'), {
-    type: 'line',
-    data: { labels, datasets },
-    options: {
-      responsive: true,
-      scales: {
-        x: { title: { display: true, text: "Time (s)" }},
-        y: { title: { display: true, text: "Value" }}
+
+chart = new Chart(document.getElementById('chart'), {
+  type: 'line',
+  data: { labels, datasets },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false, // let CSS control size
+    scales: {
+      x: { title: { display: true, text: "Time (s)" }},
+      y: { title: { display: true, text: "Value" }}
+    },
+    plugins: {
+      zoom: {
+        pan: {
+          enabled: true,
+          mode: 'x', // or 'xy'
+        },
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true
+          },
+          mode: 'x',
+        }
       }
     }
-  });
+  }
+});
+
+
 }
 
 function updateIndividualCharts() {
@@ -234,7 +277,6 @@ function saveChart(chartInstance, name) {
   link.download = name + '.png';
   link.click();
 }
-
 
 function randomColor() {
   return 'hsl(' + Math.floor(Math.random() * 360) + ', 100%, 50%)';

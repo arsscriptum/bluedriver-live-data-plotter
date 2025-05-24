@@ -4,11 +4,14 @@
   <meta charset="UTF-8">
   <title>BlueDriver CSV Plotter</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <link rel="stylesheet" media="print" href="https://assets8.freshdesk.com/assets/cdn/portal_print-6e04b27f27ab27faab81f917d275d593fa892ce13150854024baaf983b3f4326.css"/>
-  <link rel="stylesheet" media="screen" href="https://assets10.freshdesk.com/assets/cdn/falcon_portal_utils-cdd6e3a8a0ccf60cbbc7c27271252bffae829db1973666f4544d2135b3e34468.css"/>
-  <link href="theme.css?v=4&amp;d=1682098013" media="screen" rel="stylesheet" type="text/css">
+
+  <script src="js/chart.js"></script>
+  <script src="js/papaparse.min.js"></script>
+  <script src="js/chartjs-plugin-zoom.min.js"></script>
+  <link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" media="print" href="css/portal_print.css"/>
+  <link rel="stylesheet" media="screen" href="css/falcon_portal_utils.css"/>
+  <link rel="stylesheet" media="screen" href="css/theme.css"/>
   <style>
     body { 
       font-family: Arial; 
@@ -97,19 +100,36 @@ function updateChart() {
   }));
 
   if (chart) chart.destroy();
-  chart = new Chart(document.getElementById('chart'), {
-    type: 'line',
-    data: { labels, datasets },
-    options: {
-      responsive: true,
-      scales: {
-        x: { title: { display: true, text: "Time (s)" }},
-        y: { title: { display: true, text: "Value" }}
+
+chart = new Chart(document.getElementById('chart'), {
+  type: 'line',
+  data: { labels, datasets },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false, // let CSS control size
+    scales: {
+      x: { title: { display: true, text: "Time (s)" }},
+      y: { title: { display: true, text: "Value" }}
+    },
+    plugins: {
+      zoom: {
+        pan: {
+          enabled: true,
+          mode: 'x', // or 'xy'
+        },
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true
+          },
+          mode: 'x',
+        }
       }
     }
-  });
-}
-
+  }
+});
 function updateIndividualCharts() {
   const container = document.getElementById('individual-charts');
   container.innerHTML = '';
