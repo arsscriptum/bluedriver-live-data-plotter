@@ -2,6 +2,10 @@
 
 I use this to plot my live data
 
+1) Loads the CSV from [BlueDriver Scanner App](https://www.bluedriver.com/products/bluedriver-scan-tool)
+2) Dynamically creates checkboxes based on stats recorded in the file.
+3) Lazy attempt at linking stats to definition table (buggy, your a big boy, use ctrl-f or write it :)
+
 ## How ?
 
 it uses HTML and JavaScript, just load the HTML file in your browser, then load you file. (see test file in the [test directory](test/example.csv))
