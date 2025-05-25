@@ -161,7 +161,7 @@
         // ===========================================================
 
         // Pass PHP array to JavaScript
-        fetch('stats_list.json')
+        fetch('stats.json')
             .then(response => response.json())
             .then(statsList => {
                 const localNameToHrefMap = {};
@@ -177,7 +177,7 @@
                 nameToHrefMap = localNameToHrefMap;
             })
             .catch(error => {
-                console.error("Error loading stats_list.json:", error);
+                console.error("Error loading stats.json:", error);
             });
 
 
