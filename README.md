@@ -29,6 +29,18 @@ it uses HTML and JavaScript, just load the HTML file in your browser, then load 
 
 Take From [BlueDriver Support Site](https://support.bluedriver.com/support/solutions/articles/43000551789-live-data-guide)
 
+I have written a PowerShell script that uses [HtmlAgilityPack](https://html-agility-pack.net/) to download the list of stats from [BlueDriver Live data Guide on their support site](https://support.bluedriver.com/support/solutions/articles/43000551789-live-data-guide)
+
+![stats](img/getstats.png)
+
+You can get the stats and save them to a JSON file with the command below. 
+
+```powershell
+. .\Get-StatsLinks.ps1 -Json | Set-Content ..\..\html\stats_list.json
+```
+
+The JSON is parsed in the page to attempt to link the stats to a definition (when you click a checkbox name)
+
 ![screenshot3](img/screenshot3.png)
 
 ## How are O2 Sensors Displayed?
