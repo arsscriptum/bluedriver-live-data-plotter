@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "BlueDriver Stats Test",
+      "type": "shell",
+      "command": "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
+      "args": [
+        "--new-window",
+        "http://mini:82/plotter.html"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    } 
+  ]
+}

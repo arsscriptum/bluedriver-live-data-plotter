@@ -17,6 +17,8 @@ it uses HTML and JavaScript, just load the HTML file in your browser, then load 
 
 1) Remove the last few seconds if you were recording while the car was off, it will mess up the scaling
 
+
+
 ## Screen Shots
 
 ![screenshot1](img/screenshot1.png)
@@ -158,4 +160,55 @@ For more information on interpreting O2 sensor data [Walker Products has a great
 | ------------------- | --------- | ------------------------------- | --------------------- | ---------------------------- |
 | **Calculated Load** | 30–34%    | Up to \~90%                     | ✅ Yes                 | ✅ Yes                        |
 | **Absolute Load**   | 70–74%    | Up to \~400% (buggy or clipped) | ❌ Not directly        | ✅ Yes                        |
+
+
+## Apache Configuration
+
+### /etc/apache2/apache2.conf
+
+```bash
+<Directory "/var/www/html/bluedriver">
+    <IfModule mod_headers.c>
+        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+        Header set Pragma "no-cache"
+    </IfModule>
+</Directory>
+```
+
+### /etc/apache2/sites-available/010-bluedriver.conf
+
+
+```bash
+<VirtualHost *:82>
+        ServerAdmin gp_admin@gmail.com
+        DocumentRoot /home/www/bluedriver-live-data-plotter
+
+        ErrorLog /home/www/bluedriver-live-data-plotter/html/logs/error.log
+        CustomLog /home/www/bluedriver-live-data-plotter/html/logs/access.log combined
+</VirtualHost>
+```
+
+
+#### No need to manually duplicate site config in sites-enabled
+
+Instead of creating two identical files, run:
+
+```bash
+sudo a2ensite 010-bluedriver.conf
+```
+
+It will symlink the available config into sites-enabled.
+
+To disable:
+
+```bash
+sudo a2dissite 010-bluedriver.conf
+```
+
+### /etc/apache2/ports.conf
+
+Added this line: 
+
+Listen 82
+
 
