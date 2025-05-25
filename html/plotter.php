@@ -1,29 +1,3 @@
-<?php
-
-function convertDisplayName($displayName) {
-    // Replace spaces with underscores
-    $newName = str_replace(' ', '_', $displayName);
-    
-    // Remove non-alphanumeric characters except underscore
-    $newName = preg_replace('/[^a-zA-Z0-9_]/', '', $newName);
-    
-    // Replace multiple underscores with a single one
-    $newName = preg_replace('/__+/', '_', $newName);
-    
-    // Convert to lowercase and trim underscores from start/end
-    $newName = trim(strtolower($newName), '_');
-
-    return $newName;
-}
-
-
-
-$statsList = json_decode(file_get_contents("stats_list.json"), true);
-
-
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +10,7 @@ $statsList = json_decode(file_get_contents("stats_list.json"), true);
   <link rel="stylesheet" href="css/all.min.css">
   <link rel="stylesheet" media="print" href="css/portal_print.css"/>
   <link rel="stylesheet" media="screen" href="css/falcon_portal_utils.css"/>
-  <link rel="stylesheet" media="screen" href="css/theme.css"/>
+  <link href="theme.css?v=4&amp;d=1682098013" media="screen" rel="stylesheet" type="text/css">
   <style>
     body { 
       font-family: Roboto; 
@@ -113,18 +87,11 @@ $statsList = json_decode(file_get_contents("stats_list.json"), true);
 </div>
 <script>
 let csvData = [], labels = [], chart;
-
+const nameToHrefMap = {};
 // Pass PHP array to JavaScript
-const statsList = <?php echo json_encode($statsList, JSON_UNESCAPED_SLASHES); ?>;
+
 
 // Create a map from converted name to HrefId
-const nameToHrefMap = {};
-statsList.forEach(stat => {
-  const newname = sanitizeStatId(convertDisplayName(stat.Name));
-
-  nameToHrefMap[newname] = stat.HrefId;
-  console.log(`HrefId for ${newname}: ${stat.HrefId}`);
-});
 
 
 
@@ -191,7 +158,7 @@ function generateCheckboxes(headers) {
 
       ["main", "individual"].forEach(section => {
         const label = document.createElement('label');
-        label.innerHTML = `<input type="checkbox" value="${header}" onchange="${section === 'main' ? 'updateChart()' : ''}"> <a href="#${hrefId}" target="_self">${lookupName}</a><br>`;
+        label.innerHTML = `<input type="checkbox" value="${header}" onchange="${section === 'main' ? 'updateChart()' : ''}"> <a href="#${hrefId}" target="_self">${header}</a><br>`;
         document.getElementById(`checkboxes-${section}`).appendChild(label);
       });
     }
@@ -200,6 +167,28 @@ function generateCheckboxes(headers) {
 
 
 document.getElementById('csvFile').addEventListener('change', function (e) {
+  fetch('stats_list.json')
+  .then(response => response.json())
+  .then(statsList => {
+      console.log(statsList);
+
+      // Example usage of convertDisplayName:
+      for (const key in statsList) {
+          const converted = convertDisplayName(key);
+          console.log(`Original: ${key}, Converted: ${converted}`);
+          const nameToHrefMap = {};
+statsList.forEach(stat => {
+  const newname = sanitizeStatId(convertDisplayName(stat.Name));
+
+  nameToHrefMap[newname] = stat.HrefId;
+  console.log(`HrefId for ${newname}: ${stat.HrefId}`);
+});
+}
+
+  })
+  .catch(error => {
+      console.error("Error loading stats_list.json:", error);
+  });
   Papa.parse(e.target.files[0], {
     header: true,
     skipEmptyLines: true,
@@ -583,7 +572,7 @@ function randomColor() {
                     <ul>
                         <li>Bank 1 vs Bank 2 indicates the side of the engine</li>
                         <li>Sensor 1 vs Sensor 2 indicates pre (#1) and post (#2) catalytic converter sensors</li>
-                    </ul><strong>Note:</strong> Many vehicles will not use fuel trim from the post-cat sensors, in this case fuel trim will be displayed as <span style="color: rgb(44, 130, 201);"><a href="http://support.bluedriver.com/support/solutions/articles/43000551799-why-is-fuel-trim-99-2-" rel="noopener noreferrer" target="_blank">99.2%</a></span><br/> <br/><br/><img alt="" class="fr-fic fr-dii lightbox-image" data-index="0" src="/customer/portal/attachments/923585" style="max-width: 400px;" /></td>
+                    </ul><strong>Note:</strong> Many vehicles will not use fuel trim from the post-cat sensors, in this case fuel trim will be displayed as <span style="color: rgb(44, 130, 201);"><a href="http://support.bluedriver.com/support/solutions/articles/43000551799-why-is-fuel-trim-99-2-" rel="noopener noreferrer" target="_blank">99.2%</a></span><br/> <br/><br/></td>
             </tr>
             <tr>
                 <td id="pid-commanded-equivalence-ratio">Commanded Equivalence Ratio</td>
