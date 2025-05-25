@@ -1,4 +1,7 @@
-# My Blue Driver OBD2 Scanner Live Data Plotter
+<center>
+<img src="img/title.png" alt="table" />
+</center>
+<br>
 
 I use this to plot my live data
 
