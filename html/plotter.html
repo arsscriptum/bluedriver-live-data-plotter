@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <title>BlueDriver CSV Plotter</title>
 
+    <!-- =========================================================== -->
+    <!-- JavaScript and Stylesheets Includes                         -->
+    <!-- =========================================================== -->
+
     <script src="js/chart.js"></script>
     <script src="js/papaparse.min.js"></script>
     <script src="js/chartjs-plugin-zoom.min.js"></script>
@@ -78,8 +82,6 @@
 
 <body>
 
-
-
     <div class="title-images">
         <img src="img/title1.png" alt="Title 1">
         <img src="img/bluedriver.png" alt="BlueDriver">
@@ -113,6 +115,16 @@
         </div>
     </div>
 
+    <div class="zoom-controls">
+        <fieldset>
+            <legend>Zoom Controls</legend>
+            <button onclick="decreaseZoom()">-</button>
+            <button onclick="increaseZoom()">+</button>
+            <input type="text" id="zoomValue" readonly value="100">
+        </fieldset>
+    </div>
+
+
 
     </div>
 
@@ -143,6 +155,11 @@
     <script>
         let csvData = [], labels = [], chart;
         nameToHrefMap = {};
+
+        // =========================================================== 
+        // JavaScript: We Initialize the Href Values here (from Json)
+        // ===========================================================
+
         // Pass PHP array to JavaScript
         fetch('stats_list.json')
             .then(response => response.json())
@@ -164,13 +181,17 @@
             });
 
 
-        function selectAll(section) {
-            document.querySelectorAll(`#checkboxes-${section} input[type=checkbox]`).forEach(cb => cb.checked = true);
-        }
+        // =========================================================== 
+        // JavaScript: Utility Functions to parses and manipulate
+        // strings in order to set the URL Link Identifiers
+        //
+        // - getCsvKeyFromDisplayName
+        // - convertDisplayName 
+        // - sanitizeStatId
+        // - getHrefIdByPartialName
+        // ===========================================================
 
-        function unselectAll(section) {
-            document.querySelectorAll(`#checkboxes-${section} input[type=checkbox]`).forEach(cb => cb.checked = false);
-        }
+
         function getCsvKeyFromDisplayName(displayName) {
             const lookup = convertDisplayName(displayName);
             for (const stat of statsList) {
@@ -217,6 +238,22 @@
             return null; // Or return a fallback value if not found
         }
 
+        // =========================================================== 
+        // JavaScript: UI Control
+        // ===========================================================
+
+        function selectAll(section) {
+            document.querySelectorAll(`#checkboxes-${section} input[type=checkbox]`).forEach(cb => cb.checked = true);
+        }
+
+        function unselectAll(section) {
+            document.querySelectorAll(`#checkboxes-${section} input[type=checkbox]`).forEach(cb => cb.checked = false);
+        }
+        
+        // =========================================================== 
+        // JavaScript: Generate the Checkboxes Dynamically
+        // ===========================================================
+
         function generateCheckboxes(headers) {
             document.getElementById('checkboxes-main').innerHTML = '';
             document.getElementById('checkboxes-individual').innerHTML = '';
@@ -237,6 +274,9 @@
             });
         }
 
+        // =========================================================== 
+        // JavaScript: Load the CSV file here
+        // ===========================================================
 
         document.getElementById('csvFile').addEventListener('change', function (e) {
             Papa.parse(e.target.files[0], {
@@ -285,10 +325,10 @@
                             },
                             zoom: {
                                 wheel: {
-                                    enabled: true,
+                                    enabled: false,
                                 },
                                 pinch: {
-                                    enabled: true
+                                    enabled: false
                                 },
                                 mode: 'x',
                             }
@@ -296,8 +336,6 @@
                     }
                 }
             });
-
-
         }
 
         function updateIndividualCharts() {
@@ -347,6 +385,42 @@
         function randomColor() {
             return 'hsl(' + Math.floor(Math.random() * 360) + ', 100%, 50%)';
         }
+
+        // =========================================================== 
+        // JavaScript: Zoom Control
+        // ===========================================================
+
+        let currentZoomValue = 100;
+        const zoomStep = 10;
+
+        function applyZoomToChart() {
+            const factor = currentZoomValue / 100;
+            chart.resetZoom(); // Reset first to make zoom consistent
+            chart.zoomScale('x', factor, { x: 0 });
+        }
+
+        function updateZoomDisplay() {
+            document.getElementById('zoomValue').value = currentZoomValue;
+        }
+
+        function increaseZoom() {
+            currentZoomValue += zoomStep;
+            applyZoomToChart();
+            updateZoomDisplay();
+        }
+
+        function decreaseZoom() {
+            currentZoomValue = Math.max(10, currentZoomValue - zoomStep);
+            applyZoomToChart();
+            updateZoomDisplay();
+        }
+
+        // Reset chart also resets zoom
+        document.querySelector('button[onclick="chart.resetZoom()"]').addEventListener('click', () => {
+            currentZoomValue = 100;
+            updateZoomDisplay();
+        });
+
     </script>
 
     <div class="definitions-wrapper">

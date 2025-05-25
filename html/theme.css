@@ -38,6 +38,11 @@
   src: url('fonts/SourceSans3-Bold.ttf') format('truetype');
   font-weight: bold;
 }
+
+/* =========================================================== */
+/* CSS: GROUP BOXES
+/* =========================================================== */
+
 .group-box-wrapper {
   display: flex;
   gap: 20px;
@@ -62,7 +67,6 @@
   padding: 15px 20px;
   background-color: #f9f9f9;
 }
-
 .group-box legend {
   padding: 0 10px;
   font-weight: bold;
@@ -73,11 +77,41 @@
   box-sizing: border-box;
   padding: 10px;
 }
-
 .group-box label {
   display: block;
   margin: 5px 0;
 }
+.group-box-50 {
+  flex: 1 1 50%;
+  box-sizing: border-box;
+  min-width: 0; /* Prevent flex overflow */
+}
+.group-box-50 fieldset {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 15px 20px;
+  background-color: #f9f9f9;
+  height: 100%; /* Ensures stretching with content */
+}
+.group-box-30 {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 15px 20px;
+  background-color: #f9f9f9;
+  flex: 0 0 30%;
+}
+.group-box-70 {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 15px 20px;
+  background-color: #f9f9f9;
+  flex: 0 0 70%;
+}
+
+/* =========================================================== */
+/* CSS: INDIVIDUAL CHARTS
+/* =========================================================== */
+
 #individual-charts {
   display: flex;
   flex-wrap: wrap;
@@ -93,21 +127,6 @@
   display: flex;
   gap: 20px;
   padding: 20px;
-}
-
-
-.group-box-50 {
-  flex: 1 1 50%;
-  box-sizing: border-box;
-  min-width: 0; /* Prevent flex overflow */
-}
-
-.group-box-50 fieldset {
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  padding: 15px 20px;
-  background-color: #f9f9f9;
-  height: 100%; /* Ensures stretching with content */
 }
 
 .charts-grid {
@@ -127,21 +146,6 @@
   width: 100% !important;
   height: 300px !important; /* Must give height to push layout */
   display: block;
-}
-
-.group-box-30 {
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  padding: 15px 20px;
-  background-color: #f9f9f9;
-  flex: 0 0 30%;
-}
-.group-box-70 {
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  padding: 15px 20px;
-  background-color: #f9f9f9;
-  flex: 0 0 70%;
 }
 
 .title-images {
@@ -208,8 +212,42 @@ body {
   color: white;
 }
 
+/* =========================================================== */
+/* CSS: BODY STYLE
+/* =========================================================== */
+
 body {
   font-family: 'Roboto', sans-serif;
+}
+
+
+/* =========================================================== */
+/* CSS: Zoom UI
+/* =========================================================== */
+
+.zoom-controls {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px;
+}
+
+.zoom-controls fieldset {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.zoom-controls button {
+  margin: 0 5px;
+  font-size: 1em;
+  padding: 4px 10px;
+}
+
+#zoomValue {
+  width: 60px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .clearfix {
