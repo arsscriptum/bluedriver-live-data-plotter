@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "StartWebViewer",
+      "request": "launch",
+      "program": "C:\\Windows\\system32\\cmd.exe",
+      "args": ["/C", "${workspaceFolder}\\scripts\\TryStart.bat"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false
+    },
+    {
+      "name": "StopWebViewer",
+      "request": "launch",
+      "program": "C:\\Windows\\system32\\cmd.exe",
+      "args": ["/C", "${workspaceFolder}\\scripts\\TryStop.bat"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false
+    }
+  ]
+}

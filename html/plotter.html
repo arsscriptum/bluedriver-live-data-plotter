@@ -8,8 +8,9 @@
     <!-- =========================================================== -->
     <!-- JavaScript and Stylesheets Includes                         -->
     <!-- =========================================================== -->
-
+    
     <script src="js/chart.js"></script>
+    <script src="js/chartjsenhancements.min.js"></script>
     <script src="js/papaparse.min.js"></script>
     <script src="js/chartjs-plugin-zoom.min.js"></script>
     <link rel="stylesheet" href="css/all.min.css">
@@ -249,7 +250,7 @@
         function unselectAll(section) {
             document.querySelectorAll(`#checkboxes-${section} input[type=checkbox]`).forEach(cb => cb.checked = false);
         }
-        
+
         // =========================================================== 
         // JavaScript: Generate the Checkboxes Dynamically
         // ===========================================================
@@ -320,8 +321,8 @@
                     plugins: {
                         zoom: {
                             pan: {
-                                enabled: true,
-                                mode: 'x', // or 'xy'
+                                enabled: false,
+                                mode: 'xy', // or 'xy'
                             },
                             zoom: {
                                 wheel: {
@@ -330,12 +331,14 @@
                                 pinch: {
                                     enabled: false
                                 },
-                                mode: 'x',
+                                mode: 'xy',
                             }
                         }
                     }
                 }
             });
+
+            disableZoomAnimations();
         }
 
         function updateIndividualCharts() {
@@ -395,22 +398,59 @@
 
         function applyZoomToChart() {
             const factor = currentZoomValue / 100;
-            chart.resetZoom(); // Reset first to make zoom consistent
-            chart.zoomScale('x', factor, { x: 0 });
+            console.log(`applyZoomToChart factor ${factor} currentZoomValue ${currentZoomValue}`);
+
+            chart.resetZoom();
+            console.log("applyZoomToChart resetZoom");
+
+            // Simulate zooming in by adjusting the visible x-axis range
+            const xScale = chart.scales['x'];
+            const xMin = xScale.min;
+            const xMax = xScale.max;
+            const center = (xMax + xMin) / 2;
+            const range = (xMax - xMin) / factor;
+
+            chart.options.scales.x.min = center - range / 2;
+            chart.options.scales.x.max = center + range / 2;
+
+
+            chart.update();
+        }
+
+        function enableZoomAnimations() {
+
+            chart.options.animation = true; 
+            chart.options.animations.colors = true; 
+            chart.options.animations.x = true; 
+            chart.options.transitions.active.animation.duration = 2; 
+            chart.update();
+        }
+
+        function disableZoomAnimations() {
+
+            chart.options.animation = false; // disables all animations
+            chart.options.animations.colors = false; // disables animation defined by the collection of 'colors' properties
+            chart.options.animations.x = false; // disables animation defined by the 'x' property
+            chart.options.transitions.active.animation.duration = 0; // disables the animation for 'active' mode
+
+            chart.update();
         }
 
         function updateZoomDisplay() {
+            console.log(`updateZoomDisplay currentZoomValue ${currentZoomValue}`);
             document.getElementById('zoomValue').value = currentZoomValue;
         }
 
         function increaseZoom() {
             currentZoomValue += zoomStep;
+            console.log(`increaseZoom currentZoomValue ${currentZoomValue} zoomStep ${zoomStep}`);
             applyZoomToChart();
             updateZoomDisplay();
         }
 
         function decreaseZoom() {
             currentZoomValue = Math.max(10, currentZoomValue - zoomStep);
+            console.log(`decreaseZoom currentZoomValue ${currentZoomValue} zoomStep ${zoomStep}`);
             applyZoomToChart();
             updateZoomDisplay();
         }
